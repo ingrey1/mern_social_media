@@ -6,7 +6,8 @@
   "scripts": {
     "test": "test",
     "start": "node server",
-    "server": "nodemon server"
+    "server": "nodemon server",
+    "pretty": "prettier --single-quote --write \"./*.js\" \"./**/*.js\""
   },
   "keywords": [
     "react",
@@ -28,6 +29,7 @@
   },
   "devDependencies": {
     "concurrently": "^4.1.0",
-    "nodemon": "^1.19.0"
+    "nodemon": "^1.19.0",
+    "prettier": "^1.17.0"
   }
 }
