@@ -2,9 +2,11 @@
   "name": "mern_social_media",
   "version": "1.0.0",
   "description": "Social Media App",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
-    "test": "test"
+    "test": "test",
+    "start": "node server",
+    "server": "nodemon server"
   },
   "keywords": [
     "react",
