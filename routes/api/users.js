@@ -61,7 +61,6 @@ router.post(
       await user.save();
 
       // return json webtoken
-      res.send('user registered');
       const payload = {
         user: user.id
       };
