@@ -1,7 +1,8 @@
 {
 
 
-	"mongoURI": "mongodb+srv://admin:Tyrion1234!@cluster0-nxiwo.mongodb.net/test?retryWrites=true"
+	"mongoURI": "mongodb+srv://admin:Tyrion1234!@cluster0-nxiwo.mongodb.net/mern_social_media?retryWrites=true",
+	"jwtSecret": "nighteyes"
 
 
 
