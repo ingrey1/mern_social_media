@@ -114,10 +114,30 @@ router.post(
       await profile.save();
       return profile;
     } catch (err) {
-      console.error(err);
+      console.error(err.message);
       res.status(500).send('server error');
     }
   }
 );
+
+// @route  get api/profile
+// @desc   get all profiles
+// @access public
+router.get('/', async (req, res) => {
+  try {
+    // get profiles via mongoose interface
+    const profiles = await Profile.find({}).populate('user', [
+      'name',
+      'avatar'
+    ]);
+
+    if (profiles) return res.status(200).json(profiles);
+
+    return res.status(200).json({});
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('server error');
+  }
+});
 
 module.exports = router;
