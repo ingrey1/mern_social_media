@@ -263,18 +263,19 @@ router.put(
 
 router.delete('/experience/:experience_id', auth, async (req, res) => {
   try {
+    // check to see if profile and experience exist
     const profile = await Profile.findOne({ user: req.user.id });
-    if (!profile) return res.status(400).json({ msg: 'invalid info' });
 
-    const filteredExperiences = profile.experience.filter(experience => {
-      experience._id !== req.params.experience_id;
-    });
+    const experience = await profile.experience.id(req.params.experience_id);
 
-    if (filteredExperiences.length === profile.experience.length)
+    if (!profile || !experience)
       return res.status(400).json({ msg: 'invalid info' });
+    // delete the experience
+    await Profile.updateOne(
+      { user: req.user.id },
+      { $pull: { experience: { _id: req.params.experience_id } } }
+    );
 
-    profile.experience = filteredExperiences;
-    await profile.save();
     res.json({ msg: 'experience deleted' });
   } catch (err) {
     console.error(err.message);
@@ -341,5 +342,31 @@ router.put(
     }
   }
 );
+
+// @route  Delete api/profile/education/:education_id
+// @desc   delete education item
+// @access private
+
+router.delete('/education/:education_id', auth, async (req, res) => {
+  try {
+    // check to see if profile and education exist
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    const education = await profile.education.id(req.params.education_id);
+
+    if (!profile || !education)
+      return res.status(400).json({ msg: 'invalid info' });
+    // delete the education item
+    await Profile.updateOne(
+      { user: req.user.id },
+      { $pull: { education: { _id: req.params.education_id } } }
+    );
+
+    res.json({ msg: 'experience deleted' });
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send('server error');
+  }
+});
 
 module.exports = router;
