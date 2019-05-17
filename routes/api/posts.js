@@ -59,12 +59,17 @@ router.post(
 
 router.delete('/:post_id', auth, async (req, res) => {
   try {
-    const post = await Post.deleteOne({ _id: req.params.post_id });
-    if (post.deletedCount !== 1)
-      return res.status(500).json({ msg: 'invalid credentials' });
+    const post = await Post.findOne({ _id: req.params.post_id });
+    if (post.user.toString() !== req.user.id)
+      return res.status(400).json({ msg: 'invalid credentials' });
+    const deletePost = await Post.deleteOne({ _id: req.params.post_id });
+    if (deletePost.deletedCount !== 1)
+      return res.status(401).json({ msg: 'invalid credentials' });
 
     return res.json({ msg: 'post deleted' });
   } catch (err) {
+    if (err.kind === 'ObjectId')
+      res.status(400).json({ msg: 'invalid credentials' });
     console.error(err.message);
     res.status(500).send('server error');
   }
@@ -78,10 +83,12 @@ router.get('/:post_id', auth, async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.post_id });
     console.log(post);
-    if (!post) return res.status(400).json({ msg: 'invalid credentials' });
+    if (!post) return res.status(404).json({ msg: 'post not found' });
     res.json(post);
   } catch (err) {
-    console.log(err);
+    if (err.kind === 'ObjectId')
+      return res.status(404).json({ msg: 'post not found' });
+
     console.error(err.message);
     return res.status(500).send('server error');
   }
@@ -93,10 +100,38 @@ router.get('/:post_id', auth, async (req, res) => {
 
 router.get('/', auth, async (req, res) => {
   try {
-    const posts = await Post.find({});
+    const posts = await Post.find({}).sort({ date: -1 });
 
     res.json(posts);
   } catch (err) {
+    console.error(err.message);
+    res.status(500).send('server error');
+  }
+});
+
+// @route  PUT api/posts/like/:post_id
+// @desc   like post by post id
+// @access private
+
+router.put('/like/:post_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findOne({ _id: req.params.post_id });
+    
+    if (!post) return res.status(404).json({ msg: 'post not found' });
+    if (post.user.toString() === req.user.id)
+      return res.status(400).json({ msg: 'Cant like own posts' });
+    const isLiked = post.likes.find(
+      like => like.user.toString() === req.user.id
+    );
+    if (isLiked)
+      return res.status(400).json({ msg: 'user has liked this post' });
+    const like = { user: req.user.id };
+    post.likes.unshift(like);
+    await post.save();
+    return res.json({ msg: 'like added to post' });
+  } catch (err) {
+    if (err.kind === 'ObjectId')
+      return res.status(404).json({ msg: 'post not found' });
     console.error(err.message);
     res.status(500).send('server error');
   }
