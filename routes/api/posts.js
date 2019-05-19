@@ -116,7 +116,7 @@ router.get('/', auth, async (req, res) => {
 router.put('/like/:post_id', auth, async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.post_id });
-    
+
     if (!post) return res.status(404).json({ msg: 'post not found' });
     if (post.user.toString() === req.user.id)
       return res.status(400).json({ msg: 'Cant like own posts' });
@@ -128,7 +128,7 @@ router.put('/like/:post_id', auth, async (req, res) => {
     const like = { user: req.user.id };
     post.likes.unshift(like);
     await post.save();
-    return res.json({ msg: 'like added to post' });
+    return res.json(post.likes);
   } catch (err) {
     if (err.kind === 'ObjectId')
       return res.status(404).json({ msg: 'post not found' });
@@ -136,5 +136,76 @@ router.put('/like/:post_id', auth, async (req, res) => {
     res.status(500).send('server error');
   }
 });
+
+// @route  PUT api/posts/unlike/:post_id
+// @desc   unlike post by post id
+// @access private
+
+router.put('/unlike/:post_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findOne({ _id: req.params.post_id });
+    if (!post) return res.status(404).json({ msg: 'post not fond' });
+    if (post.user.toString() === req.user.id)
+      return res.status(400).json({ msg: 'cant unlike own posts' });
+    const like = post.likes.find(like => like.user.toString() === req.user.id);
+    if (!like) return res.status(404).json('msg: like not found');
+    // remove like
+    await Post.update(
+      { _id: req.params.post_id },
+      { $pull: { likes: { user: req.user.id } } }
+    );
+    return res.json(post.likes);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId')
+      return res.status(404).json({ msg: 'post not found' });
+    res.status(500).send('server error');
+  }
+});
+
+// @route  POST api/posts/comment/:post_id
+// @desc   comment on post
+// @access private
+
+router.post(
+  '/comment/:post_id',
+  [
+    auth,
+    [
+      check('text', 'comment has to have text')
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    try {
+      const errors = validationResult(req);
+      console.log(errors.array());
+      if (!errors.isEmpty())
+        return res.status(400).json({ errors: errors.array() });
+
+      // make sure post exists
+      const post = await Post.findOne({ _id: req.params.post_id });
+      // grab user
+      const user = await User.findById(req.user.id);
+      if (!post) return res.status(404).json({ msg: 'post not found' });
+      // create and populate comment object
+      const comment = {};
+      comment.name = user.name;
+      comment.text = req.body.text;
+      comment.user = user._id;
+      comment.avatar = user.avatar;
+      post.comments.unshift(comment);
+      await post.save();
+      return res.json(post.comments);
+    } catch (err) {
+      console.error(err.message);
+
+      if (err.kind === 'ObjectId')
+        return res.status(404).json({ msg: 'post not found' });
+      res.status(500).send('server error');
+    }
+  }
+);
 
 module.exports = router;
