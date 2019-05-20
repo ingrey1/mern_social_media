@@ -208,4 +208,35 @@ router.post(
   }
 );
 
+// @route  Delete api/posts/comment/:post_id/:comment_id
+// @desc   delete comment on post by comment id and post id
+// @access private
+
+router.delete('/comment/:post_id/:comment_id', auth, async (req, res) => {
+  try {
+    const post = await Post.findById(req.params.post_id);
+    if (!post) return res.status(404).json({ msg: 'post not found' });
+    let commentIndex;
+    for (let i = 0; i < post.comments.length; i++) {
+      console.log(post.comments[i]._id.toString());
+      if (post.comments[i]._id.toString() === req.params.comment_id) {
+        commentIndex = i;
+        break;
+      }
+    }
+
+    if (isNaN(commentIndex))
+      return res.status(404).json({ msg: 'comment not found' });
+    post.comments.splice(commentIndex, 1);
+    await post.save();
+
+    res.json(post.comments);
+  } catch (err) {
+    console.error(err.message);
+    if (err.kind === 'ObjectId')
+      return res.status(404).json({ msg: 'resource not found' });
+    res.status(500).send('server error');
+  }
+});
+
 module.exports = router;
