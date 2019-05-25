@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useEffect } from 'react';
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Landing from './components/layout/Landing';
@@ -8,8 +8,19 @@ import Alert from './components/layout/Alert';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import store from './store';
 import { Provider } from 'react-redux';
+import { loadUser } from './actions/auth';
+import setAuthToken from './utils/setAuthToken';
+
+if (localStorage.token) {
+  setAuthToken(localStorage.token);
+}
 
 const App = props => {
+  // allow functional component to run on componentDidMount; will only run once
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <Provider store={store}>
       <Router>

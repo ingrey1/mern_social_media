@@ -3,6 +3,7 @@ import React, { Fragment, useState } from 'react';
 import { setAlert } from '../../actions/alert';
 import { register } from '../../actions/auth';
 import PropTypes from 'prop-types';
+import { Redirect, Link } from 'react-router-dom';
 
 const Register = props => {
   const [formData, setFormData] = useState({
@@ -26,6 +27,8 @@ const Register = props => {
       props.register({ name, email, password });
     }
   };
+
+  if (props.isAuthenticated) return <Redirect to="/dashboard" />;
 
   return (
     <Fragment>
@@ -81,7 +84,7 @@ const Register = props => {
           <input type="submit" className="btn btn-primary" value="Register" />
         </form>
         <p className="my-1">
-          Already have an account? <a href="login.html">Sign In</a>
+          Already have an account? <Link to="/login">Sign In</Link>
         </p>
       </section>
     </Fragment>
@@ -90,10 +93,17 @@ const Register = props => {
 
 Register.propTypes = {
   setAlert: PropTypes.func.isRequired,
-  register: PropTypes.func.isRequired
+  register: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
+};
+
+const mapStateToProps = state => {
+  return {
+    isAuthenticated: state.auth.isAuthenticated
+  };
 };
 
 export default connect(
-  null,
+  mapStateToProps,
   { setAlert, register }
 )(Register);
