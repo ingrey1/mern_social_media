@@ -4,7 +4,8 @@ import {
   USER_LOADED,
   AUTH_ERROR,
   LOGIN_SUCCESS,
-  LOGIN_FAILURE
+  LOGIN_FAILURE,
+  LOGOUT
 } from '../actions/types';
 
 const initialState = {
@@ -73,6 +74,15 @@ export default function(state = initialState, action) {
         loading: false,
         isAuthenticated: true,
         user: action.payload
+      };
+
+    case LOGOUT:
+      localStorage.removeItem('token');
+      return {
+        ...state,
+        loading: false,
+        isAuthenticated: false,
+        user: null
       };
 
     default:

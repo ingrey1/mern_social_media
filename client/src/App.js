@@ -16,7 +16,7 @@ if (localStorage.token) {
 }
 
 const App = props => {
-  // allow functional component to run on componentDidMount; will only run once
+  // allow functional component to run on componentDidMount
   useEffect(() => {
     store.dispatch(loadUser());
   }, []);
