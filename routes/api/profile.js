@@ -98,6 +98,7 @@ router.post(
     }
 
     try {
+      console.log('made it to update/create profile location');
       let profile = await Profile.findOne({ user: req.user.id });
 
       if (profile) {
@@ -114,7 +115,8 @@ router.post(
       // user doesnt have a profile, so create one
       profile = new Profile(profileFields);
       await profile.save();
-      return profile;
+      console.log('new profile successfully saved');
+      return res.json(profile);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('server error');
