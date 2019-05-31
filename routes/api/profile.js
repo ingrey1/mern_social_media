@@ -81,19 +81,19 @@ router.post(
     }
     profileFields.social = {};
 
-    if (youtube) {
+    if (youtube || youtube === '') {
       profileFields.social.youtube = youtube;
     }
-    if (facebook) {
+    if (facebook || facebook === '') {
       profileFields.social.facebook = facebook;
     }
-    if (twitter) {
+    if (twitter || twitter === '') {
       profileFields.social.twitter = twitter;
     }
-    if (instagram) {
+    if (instagram || instagram === '') {
       profileFields.social.instagram = instagram;
     }
-    if (linkedin) {
+    if (linkedin || linkedin === '') {
       profileFields.social.linkedin = linkedin;
     }
 
