@@ -5,6 +5,7 @@ import { getCurrentProfile } from '../../actions/profile';
 import Spinner from '../layout/Spinner';
 import { Link } from 'react-router-dom';
 import DashboardActions from './DashboardActions';
+import Experience from './Experience';
 
 const Dashboard = props => {
   // component did mount, load profile data
@@ -25,6 +26,7 @@ const Dashboard = props => {
       {props.profile.profile !== null ? (
         <Fragment>
           <DashboardActions />
+          <Experience experiences={props.profile.profile.experience} />
         </Fragment>
       ) : (
         <Fragment>
