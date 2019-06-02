@@ -39,7 +39,8 @@ const Dashboard = props => {
                 props.logout();
               }}
             >
-              <i className="fas fa-user-minus" />Delete My Account
+              <i className="fas fa-user-minus" />
+              Delete My Account
             </button>
           </div>
         </Fragment>
