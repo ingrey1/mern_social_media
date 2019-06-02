@@ -24,7 +24,7 @@ const EditProfile = props => {
   const [displaySocialInputs, toggleSocialInputs] = useState(false);
 
   useEffect(() => {
-    getCurrentProfile();
+    props.getCurrentProfile();
     // update fields based on current profile data
 
     setFormData({

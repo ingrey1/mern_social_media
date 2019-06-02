@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { deleteExperience } from '../../actions/profile';
 import Moment from 'react-moment';
+import { withRouter } from 'react-router-dom';
 
 const Experience = props => {
   const experiences = props.experiences.map(exp => {
@@ -20,7 +21,12 @@ const Experience = props => {
         </td>
 
         <td>
-          <button className="btn btn-danger">Delete</button>
+          <button
+            className="btn btn-danger"
+            onClick={() => props.deleteExperience(exp._id, props.history)}
+          >
+            Delete
+          </button>
         </td>
       </tr>
     );
@@ -55,4 +61,4 @@ Experience.propTypes = {
 export default connect(
   null,
   { deleteExperience }
-)(Experience);
+)(withRouter(Experience));

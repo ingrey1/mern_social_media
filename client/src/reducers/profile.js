@@ -2,7 +2,8 @@ import {
   GET_PROFILE,
   PROFILE_ERROR,
   CLEAR_PROFILE,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  DELETE_ACCOUNT
 } from '../actions/types';
 
 const initialState = {
@@ -40,9 +41,14 @@ export default function(state = initialState, action) {
     case UPDATE_PROFILE:
       return {
         ...state,
-        profile: action.payload.profile,
+        profile: action.payload,
         loading: false
       };
+
+    case DELETE_ACCOUNT:
+      localStorage.removeItem('token');
+
+      return state;
 
     default:
       return state;

@@ -279,7 +279,7 @@ router.delete('/experience/:experience_id', auth, async (req, res) => {
       { $pull: { experience: { _id: req.params.experience_id } } }
     );
 
-    res.json({ msg: 'experience deleted' });
+    res.json(profile);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('server error');
@@ -338,7 +338,7 @@ router.put(
 
       profile.education.unshift(educationExperience);
       await profile.save();
-      res.json({ profile });
+      res.json(profile);
     } catch (err) {
       console.error(err.messsage);
       res.status(500).send('server error');
@@ -365,7 +365,7 @@ router.delete('/education/:education_id', auth, async (req, res) => {
       { $pull: { education: { _id: req.params.education_id } } }
     );
 
-    res.json({ msg: 'experience deleted' });
+    res.json(profile);
   } catch (err) {
     console.error(err.message);
     res.status(500).send('server error');
