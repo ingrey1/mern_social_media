@@ -257,7 +257,7 @@ export const deleteAccount = history => async dispatch => {
     )
   ) {
     try {
-      const res = await axios.delete('/api/profile');
+      await axios.delete('/api/profile');
 
       dispatch({
         type: DELETE_ACCOUNT

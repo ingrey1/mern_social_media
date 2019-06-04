@@ -8,7 +8,7 @@ const Navbar = props => {
   const guestLinks = (
     <ul>
       <li>
-        <Link to="/profile">Developers</Link>
+        <Link to="/profiles">Developers</Link>
       </li>
       <li>
         <Link to="/register">Register</Link>
@@ -21,6 +21,13 @@ const Navbar = props => {
 
   const authLinks = (
     <ul>
+      <li>
+        <Link to="/profiles">Developers</Link>
+      </li>
+
+      <li>
+        <Link to="/dashboard">Dashboard</Link>
+      </li>
       <li>
         <Link to="/" onClick={() => props.logout()}>
           Logout
