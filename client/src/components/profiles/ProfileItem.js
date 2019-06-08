@@ -15,7 +15,10 @@ const ProfileItem = props => {
         <p className="my-1">
           {props.profile.location && <span>{props.profile.location}</span>}
         </p>
-        <Link to={`/profile/${props.profile._id}`} className="btn btn-primary">
+        <Link
+          to={`/profile/${props.profile.user._id}`}
+          className="btn btn-primary"
+        >
           View Profile
         </Link>
       </div>
