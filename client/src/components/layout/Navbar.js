@@ -22,6 +22,9 @@ const Navbar = props => {
   const authLinks = (
     <ul>
       <li>
+        <Link to="/posts">Posts</Link>
+      </li>
+      <li>
         <Link to="/profiles">Developers</Link>
       </li>
 
@@ -32,9 +35,6 @@ const Navbar = props => {
         <Link to="/" onClick={() => props.logout()}>
           Logout
         </Link>
-      </li>
-      <li>
-        <Link to="/dashboard">Dashboard</Link>
       </li>
     </ul>
   );

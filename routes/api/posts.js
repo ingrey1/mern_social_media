@@ -118,8 +118,8 @@ router.put('/like/:post_id', auth, async (req, res) => {
     const post = await Post.findOne({ _id: req.params.post_id });
 
     if (!post) return res.status(404).json({ msg: 'post not found' });
-    if (post.user.toString() === req.user.id)
-      return res.status(400).json({ msg: 'Cant like own posts' });
+    console.log('made it past 404');
+
     const isLiked = post.likes.find(
       like => like.user.toString() === req.user.id
     );
@@ -145,16 +145,21 @@ router.put('/unlike/:post_id', auth, async (req, res) => {
   try {
     const post = await Post.findOne({ _id: req.params.post_id });
     if (!post) return res.status(404).json({ msg: 'post not fond' });
-    if (post.user.toString() === req.user.id)
-      return res.status(400).json({ msg: 'cant unlike own posts' });
+    console.log('unlike made it past first 404');
+    console.log(post);
     const like = post.likes.find(like => like.user.toString() === req.user.id);
+    console.log('like exists in unlike', like);
     if (!like) return res.status(404).json('msg: like not found');
+    console.log('unlike made it past second 404');
     // remove like
-    await Post.update(
+    await Post.updateOne(
       { _id: req.params.post_id },
       { $pull: { likes: { user: req.user.id } } }
     );
-    return res.json(post.likes);
+
+    const newPost = await Post.findOne({ _id: req.params.post_id });
+
+    return res.json(newPost.likes);
   } catch (err) {
     console.error(err.message);
     if (err.kind === 'ObjectId')
