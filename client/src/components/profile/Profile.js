@@ -8,6 +8,7 @@ import ProfileTop from './ProfileTop';
 import ProfileAbout from './ProfileAbout';
 import ProfileExperience from './ProfileExperience';
 import ProfileEducation from './ProfileEducation';
+import ProfileGithub from './ProfileGithub';
 
 const Profile = props => {
   useEffect(() => {
@@ -75,6 +76,13 @@ const Profile = props => {
                 <h4>No Education Credentials</h4>
               )}
             </div>
+
+            {props.profile.profile.githubusername &&
+              props.profile.profile.githubusername !== '' && (
+                <ProfileGithub
+                  username={props.profile.profile.githubusername}
+                />
+              )}
           </div>
         </Fragment>
       )}
