@@ -16,9 +16,6 @@ router.post(
     [
       check('text', 'text is required field')
         .not()
-        .isEmpty(),
-      check('title', 'title is a required field')
-        .not()
         .isEmpty()
     ]
   ],
@@ -28,7 +25,7 @@ router.post(
       if (!errors.isEmpty())
         return res.status(400).json({ msg: 'invalid credentials' });
 
-      const { title, text } = req.body;
+      const { text } = req.body;
 
       const postFields = {};
 
@@ -37,7 +34,6 @@ router.post(
       });
 
       postFields.user = req.user.id;
-      postFields.title = title;
       postFields.text = text;
       postFields.name = user.name;
       postFields.avatar = user.avatar;
@@ -45,7 +41,7 @@ router.post(
       const newPost = new Post(postFields);
       await newPost.save();
 
-      res.json({ newPost });
+      res.json(newPost);
     } catch (err) {
       console.error(err.message);
       res.status(500).send('server error');
