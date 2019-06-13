@@ -1,0 +1,12 @@
+{
+
+
+	"mongoURI": "mongodb+srv://admin:Tyrion1234!@cluster0-nxiwo.mongodb.net/mern_social_media?retryWrites=true",
+	"jwtSecret": "nighteyes",
+	"githubClientSecret": "3f88b725f0a625d1dd75dc6db6110062788224a0",
+	"githubClientId": "214247866894fd02873c"
+
+
+
+
+}
